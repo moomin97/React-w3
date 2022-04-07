@@ -1,37 +1,63 @@
 import React from "react";
-import { Button, Grid, Input, Text } from "../elements";
-import { setCookie } from "../shared/Cookie";
+import { Text, Input, Grid, Button } from "../elements";
+import { getCookie, setCookie, deleteCookie } from "../shared/Cookie";
 
+import { useDispatch } from "react-redux";
+import { actionCreators as userActions } from "../redux/modules/user";
 
 const Login = (props) => {
-    const [id, setId] = React.useState('');
-    const [pwd, setPwd] = React.useState('');
+  const dispatch = useDispatch();
 
-    const changeId = (e) => {
-        setId(e.target.value);
+  const [id, setId] = React.useState("");
+  const [pwd, setPwd] = React.useState("");
+
+  const login = () => {
+    if(id === "" || pwd === ""){
+      window.alert("아이디 혹은 비밀번호가 공란입니다! 입력해주세요!");
+      return;
     }
 
-    const changePwd = (e) => {
-        setPwd(e.target.value);
-    }
+    dispatch(userActions.loginFB(id, pwd));
+  };
 
-    const login = () => {
-        setCookie("user_id", id, 3);
-        setCookie("user_pwd", pwd, 3);
-    }
-    return (
-        <React.Fragment>
-            <Grid padding="16px" >
-                <Text type="heading">로그인 페이지</Text>
-            </Grid>
-            <Grid padding="16px">
-                <Input label="아이디" value={id} onChange={changeId} placeholder="아이디를 입력하세요."/>
-                <Input label="비밀번호" value={pwd} onChange={changePwd} type="password" placeholder="비밀번호를 입력하세요."/>
-            </Grid>
+  return (
+    <React.Fragment>
+      <Grid padding="16px">
+        <Text size="32px" bold>
+          로그인
+        </Text>
 
-            <Button text="로그인하기" __click={() => {login();}}>로그인</Button>
-        </React.Fragment>
-    )
-}
+        <Grid padding="16px 0px">
+          <Input
+            label="아이디"
+            placeholder="아이디를 입력해주세요."
+            _onChange={(e) => {
+              setId(e.target.value);
+            }}
+          />
+        </Grid>
+
+        <Grid padding="16px 0px">
+          <Input
+            label="패스워드"
+            placeholder="패스워드 입력해주세요."
+            type="password"
+            _onChange={(e) => {
+              setPwd(e.target.value);
+            }}
+          />
+        </Grid>
+
+        <Button
+          text="로그인하기"
+          _onClick={() => {
+            console.log("로그인 했어!");
+            login();
+          }}
+        ></Button>
+      </Grid>
+    </React.Fragment>
+  );
+};
 
 export default Login;

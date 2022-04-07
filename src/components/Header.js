@@ -1,20 +1,20 @@
 import React from "react";
 import {Grid, Text, Button} from "../elements";
 import { getCookie, deleteCookie } from "../shared/Cookie";
+import { useSelector, useDispatch } from "react-redux";
+import { actionCreators as userActions } from "../redux/modules/user";
+import { history } from "../redux/configureStore";
+import { apiKey } from "../shared/firebase";
+// import { is } from "immer/dist/internal";
 
 const Header = (props) => {
-    const [is_login, setIslogin] = React.useState(false);
+    const dispatch = useDispatch();
+    const is_login = useSelector((state) => state.user.is_login);
+    const _session_key = `firebase:authUser:${apiKey}:[DEFAULT]`;
+    const is_session = sessionStorage.getItem(_session_key)? true : false;
 
-    React.useEffect(() => {
-        let cookie = getCookie("user_id");
-        console.log(cookie);
-        if (cookie) {
-            setIslogin(true);
-        } else {
-            setIslogin(false);
-        }
-    })
-    if (is_login) {
+    console.log(is_session);
+    if (is_login && is_session) {
         return (
             <Grid is_flex padding="4px 16px">
                 <Grid>
@@ -24,7 +24,7 @@ const Header = (props) => {
                 <Grid is_flex>
                     <Button text="내정보"></Button>
                     <Button text="알림"></Button>
-                    <Button text="로그아웃"></Button>
+                    <Button text="로그아웃" _onClick={() => {dispatch(userActions.logOut({}));}}></Button>
                 </Grid>
             </Grid>
         );
@@ -39,8 +39,12 @@ const Header = (props) => {
                 </Grid>
                 
                 <Grid is_flex>
-                    <Button text="로그인"></Button>
-                    <Button text="회원가입"></Button>
+                    <Button text="로그인" _onClick={() => {
+                        history.push("/login");
+                    }}></Button>
+                    <Button text="회원가입" _onClick={() => {
+                        history.push("/signup");
+                    }}></Button>
                 </Grid>
             </Grid>
         </React.Fragment>

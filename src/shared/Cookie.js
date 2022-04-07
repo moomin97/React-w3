@@ -1,3 +1,4 @@
+
 // 키값 기준으로 쿠키에 저장된 값을 가져오는 함수
 const getCookie = (name) => {
     // 쿠키 값을 가져옵니다.
@@ -16,7 +17,7 @@ const getCookie = (name) => {
     // 날짜를 만들어줍니다.
     date.setTime(date.getTime() + exp * 24 * 60 * 60 * 1000);
     // 저장!
-    document.cookie = `${name}=${value};expires=${date.toUTCString()};path=/`;
+    document.cookie = `${name}=${value};expires=${date.toUTCString()}`;
   };
   
   // 만료일을 예전으로 설정해 쿠키를 지웁니다.
